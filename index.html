@@ -26,14 +26,29 @@
   }
 
   .control-row {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    padding: 8px 14px;
-    background: #2d1a10;
-    border-bottom: 2px solid rgba(255,255,255,.08);
-  }
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  background: #2d1a10;
+  border-bottom: 2px solid rgba(255,255,255,.08);
+}
+.top-team-label {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 1000;
+  color: #fff8e7;
+}
 
+.team-head {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 1000;
+  line-height: 1.15;
+  color: #fff8e7;
+  padding: 0 8px;
+}
   .control-side {
     display: flex;
     align-items: center;
@@ -502,25 +517,27 @@
     .big-uz { font-size: 20px; }
     .room-title { font-size: 42px; }
     .room-sub { font-size: 24px; }
+.top-team-label { font-size: 22px; }
+.team-head { font-size: 18px; }
   }
 </style>
 </head>
 <body>
 <div class="app">
   <div class="control-row">
-    <div class="control-side team-top-label">1-jamoa</div>
-    <button class="restart-btn" onclick="guardedRestart()">Qayta boshlash</button>
-    <div class="control-side team-top-label">2-jamoa</div>
-  </div>
+  <div class="top-team-label">1-jamoa</div>
+  <button class="restart-btn" onclick="guardedRestart()">Qayta boshlash</button>
+  <div class="top-team-label">2-jamoa</div>
+</div>
 
   <div class="header">
-    <div class="team-head">1-jamoa</div>
-    <div class="center-box">
-      <div class="room-box" id="roomLabel">1-xona</div>
-      <div class="timer-box" id="roundTimer">30</div>
-    </div>
-    <div class="team-head">2-jamoa</div>
+  <div class="team-head" id="headerQuestionLeft">Savol 1</div>
+  <div class="center-box">
+    <div class="room-box" id="roomLabel">1-xona</div>
+    <div class="timer-box" id="roundTimer">30</div>
   </div>
+  <div class="team-head" id="headerQuestionRight">Savol 1</div>
+</div>
 
   <div class="boards">
     <div class="board" id="board1"></div>
@@ -843,6 +860,11 @@ function updateRoundTimer() {
 function updateRoomLabel() {
   document.getElementById("roomLabel").textContent = roomShortTitle(state.roomIndex);
 }
+function updateHeaderQuestions() {
+  const num = totalQuestionNumber();
+  document.getElementById("headerQuestionLeft").textContent = `Savol ${num}`;
+  document.getElementById("headerQuestionRight").textContent = `Savol ${num}`;
+}
 
 function showRoomTransition(title, sub, nextAction) {
   const overlay = document.getElementById("roomOverlay");
@@ -971,6 +993,7 @@ function startRound() {
   state.roundTime = 30;
   updateRoundTimer();
   updateRoomLabel();
+updateHeaderQuestions();
 
   const qText = q.q.replace(/^Savol\s+\d+\.\s*/i, `Savol ${totalQuestionNumber()}. `);
 
