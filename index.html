@@ -724,7 +724,6 @@ function createBoard(rootId, teamName) {
       this.selectedAt = null;
       this.options = makeOptions(q);
       document.getElementById(`${rootId}_map`).src = MAPS[battleKey];
-      document.getElementById(`${rootId}_question`).textContent = q.q;
       document.getElementById(`${rootId}_bottom`).textContent = `${battleLabel(battleKey)} jangi`;
       document.getElementById(`${rootId}_overlay`).classList.remove("show");
       this.showScene();
@@ -860,10 +859,9 @@ function updateRoundTimer() {
 function updateRoomLabel() {
   document.getElementById("roomLabel").textContent = roomShortTitle(state.roomIndex);
 }
-function updateHeaderQuestions() {
-  const num = totalQuestionNumber();
-  document.getElementById("headerQuestionLeft").textContent = `Savol ${num}`;
-  document.getElementById("headerQuestionRight").textContent = `Savol ${num}`;
+function updateHeaderQuestions(qText) {
+  document.getElementById("headerQuestionLeft").textContent = qText;
+  document.getElementById("headerQuestionRight").textContent = qText;
 }
 
 function showRoomTransition(title, sub, nextAction) {
@@ -993,9 +991,9 @@ function startRound() {
   state.roundTime = 30;
   updateRoundTimer();
   updateRoomLabel();
-updateHeaderQuestions();
 
   const qText = q.q.replace(/^Savol\s+\d+\.\s*/i, `Savol ${totalQuestionNumber()}. `);
+  updateHeaderQuestions(qText);
 
   board1.renderQuestion({ ...q, q: qText }, room.key);
   board2.renderQuestion({ ...q, q: qText }, room.key);
