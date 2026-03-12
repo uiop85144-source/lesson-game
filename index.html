@@ -6,6 +6,7 @@
 <title>Jaloliddin 3 jang o‘yini</title>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
   html, body {
     margin: 0;
     width: 100%;
@@ -15,57 +16,32 @@
     background: #120b07;
     color: white;
   }
+
   body { user-select: none; }
 
   .app {
     width: 100vw;
     height: 100vh;
     display: grid;
-    grid-template-rows: 62px 68px 1fr;
+    grid-template-rows: 62px 78px 1fr;
     background: linear-gradient(180deg, #2a170d 0%, #120b07 100%);
   }
 
   .control-row {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 14px;
-  background: #2d1a10;
-  border-bottom: 2px solid rgba(255,255,255,.08);
-}
-.top-team-label {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 1000;
-  color: #fff8e7;
-}
-
-.team-head {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 1000;
-  line-height: 1.15;
-  color: #fff8e7;
-  padding: 0 8px;
-}
-  .control-side {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    background: #2d1a10;
+    border-bottom: 2px solid rgba(255,255,255,.08);
   }
 
-  .control-side:first-child {
-    justify-content: flex-start;
-  }
-
-  .control-side:last-child {
-    justify-content: flex-end;
-  }
-
-  .team-top-label {
-    font-size: 22px;
-    font-weight: 900;
-    color: #fff3cf;
+  .top-team-label {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 1000;
+    color: #fff8e7;
   }
 
   .restart-btn {
@@ -91,8 +67,11 @@
 
   .team-head {
     text-align: center;
-    font-size: 22px;
-    font-weight: 900;
+    font-size: 18px;
+    font-weight: 1000;
+    line-height: 1.2;
+    color: #fff8e7;
+    padding: 0 8px;
   }
 
   .center-box {
@@ -509,35 +488,37 @@
   @media (max-width: 1280px) {
     .question-bar { font-size: 20px; }
     .opt { font-size: 18px; }
-    .team-head { font-size: 20px; }
-    .team-top-label { font-size: 20px; }
+    .team-head { font-size: 16px; }
+    .top-team-label { font-size: 22px; }
     .badge { font-size: 18px; }
     .bottom { font-size: 18px; }
     .big-en { font-size: 34px; }
     .big-uz { font-size: 20px; }
     .room-title { font-size: 42px; }
     .room-sub { font-size: 24px; }
-.top-team-label { font-size: 22px; }
-.team-head { font-size: 18px; }
+    .timer-box, .room-box {
+      font-size: 22px;
+      min-width: 130px;
+    }
   }
 </style>
 </head>
 <body>
 <div class="app">
   <div class="control-row">
-  <div class="top-team-label">1-jamoa</div>
-  <button class="restart-btn" onclick="guardedRestart()">Qayta boshlash</button>
-  <div class="top-team-label">2-jamoa</div>
-</div>
+    <div class="top-team-label">1-jamoa</div>
+    <button class="restart-btn" onclick="guardedRestart()">Qayta boshlash</button>
+    <div class="top-team-label">2-jamoa</div>
+  </div>
 
   <div class="header">
-  <div class="team-head" id="headerQuestionLeft">Savol 1</div>
-  <div class="center-box">
-    <div class="room-box" id="roomLabel">1-xona</div>
-    <div class="timer-box" id="roundTimer">30</div>
+    <div class="team-head" id="headerQuestionLeft">Savol 1</div>
+    <div class="center-box">
+      <div class="room-box" id="roomLabel">1-xona</div>
+      <div class="timer-box" id="roundTimer">30</div>
+    </div>
+    <div class="team-head" id="headerQuestionRight">Savol 1</div>
   </div>
-  <div class="team-head" id="headerQuestionRight">Savol 1</div>
-</div>
 
   <div class="boards">
     <div class="board" id="board1"></div>
@@ -723,10 +704,14 @@ function createBoard(rootId, teamName) {
       this.selectedCorrect = false;
       this.selectedAt = null;
       this.options = makeOptions(q);
+
       document.getElementById(`${rootId}_map`).src = MAPS[battleKey];
+      document.getElementById(`${rootId}_question`).textContent = q.q;
       document.getElementById(`${rootId}_bottom`).textContent = `${battleLabel(battleKey)} jangi`;
       document.getElementById(`${rootId}_overlay`).classList.remove("show");
+
       this.showScene();
+
       const box = document.getElementById(`${rootId}_options`);
       box.innerHTML = "";
       this.options.forEach((opt, idx) => {
@@ -743,7 +728,7 @@ function createBoard(rootId, teamName) {
       const c = document.getElementById(`${rootId}_c`);
       const m = document.getElementById(`${rootId}_m`);
       flash.classList.remove("active");
-      [j,c,m].forEach(el => el.classList.remove("show"));
+      [j, c, m].forEach(el => el.classList.remove("show"));
       void flash.offsetWidth;
       flash.classList.add("active");
       setTimeout(() => j.classList.add("show"), 120);
@@ -770,6 +755,7 @@ function createBoard(rootId, teamName) {
         else if (this.selectedIndex === i && !opt.correct) b.classList.add("wrong");
         else b.classList.add("dim");
       });
+
       document.getElementById(`${rootId}_bottom`).textContent = `To‘g‘ri javob: ${correctText}`;
       document.getElementById(`${rootId}_overlayEn`).textContent = result.en;
       document.getElementById(`${rootId}_overlayUz`).textContent = result.uz;
@@ -817,6 +803,7 @@ function stopAllAudio(includeApplause = true) {
     "audioFinal"
   ];
   if (includeApplause) ids.push("audioApplause");
+
   ids.forEach(id => {
     const a = document.getElementById(id);
     if (!a) return;
@@ -859,6 +846,7 @@ function updateRoundTimer() {
 function updateRoomLabel() {
   document.getElementById("roomLabel").textContent = roomShortTitle(state.roomIndex);
 }
+
 function updateHeaderQuestions(qText) {
   document.getElementById("headerQuestionLeft").textContent = qText;
   document.getElementById("headerQuestionRight").textContent = qText;
@@ -931,9 +919,11 @@ function submitPwd() {
 
 document.getElementById("pwdSubmit").onclick = submitPwd;
 document.getElementById("pwdCancel").onclick = closePwdModal;
+
 document.getElementById("pwdModal").addEventListener("click", e => {
   if (e.target.id === "pwdModal") closePwdModal();
 });
+
 document.getElementById("pwdInput").addEventListener("keydown", e => {
   if (e.key === "Enter") submitPwd();
   if (e.key === "Escape") closePwdModal();
@@ -984,6 +974,7 @@ function answerForBoard(board, idx) {
 
 function startRound() {
   if (!state.running) return;
+
   const room = currentRoom();
   const q = currentQuestion();
 
@@ -1008,6 +999,7 @@ function tick() {
   if (!state.running) return;
   state.roundTime--;
   updateRoundTimer();
+
   if (state.roundTime <= 0) {
     clearInterval(state.timer);
     revealRound();
@@ -1018,12 +1010,15 @@ function resultForBoard(board, other) {
   if (!board.selectedCorrect) {
     return { en: "TRY AGAIN", uz: "Qayta urinib ko‘ring" };
   }
+
   if (board.selectedAt !== null && board.selectedAt <= 5) {
     return { en: "BINGO BANGO BONGO!", uz: "Siz juda tez to‘g‘ri topdingiz" };
   }
+
   if (other.selectedIndex !== null && !other.selectedCorrect) {
     return { en: "WINNER WINNER CHICKEN DINNER!", uz: "Siz raqib xatosidan foydalandingiz" };
   }
+
   return { en: "VICTORY!", uz: "G‘alaba qildingiz" };
 }
 
